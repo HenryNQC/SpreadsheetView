@@ -500,6 +500,10 @@ public class SpreadsheetView: UIView {
                 $0.touchesCancelled = { [weak self] (touches, event) in
                     self?.touchesCancelled(touches, event)
                 }
+                
+                $0.touchesMoved = { [weak self] (touches, event) in
+                    self?.touchesMoved(touches, event)
+                }
             } else {
                 $0.touchesBegan = nil
                 $0.touchesEnded = nil

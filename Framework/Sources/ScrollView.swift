@@ -21,6 +21,7 @@ final class ScrollView: UIScrollView, UIGestureRecognizerDelegate {
     var touchesBegan: TouchHandler?
     var touchesEnded: TouchHandler?
     var touchesCancelled: TouchHandler?
+    var touchesMoved: TouchHandler?
 
     var layoutAttributes = LayoutAttributes(startColumn: 0, startRow: 0, numberOfColumns: 0, numberOfRows: 0, columnCount: 0, rowCount: 0, insets: .zero)
     var state = State()
@@ -74,11 +75,18 @@ final class ScrollView: UIScrollView, UIGestureRecognizerDelegate {
         }
         touchesEnded?(touches, event)
     }
-
+    
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard hasDisplayedContent else {
             return
         }
         touchesCancelled?(touches, event)
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard hasDisplayedContent else {
+            return
+        }
+        touchesMoved?(touches, event)
     }
 }

@@ -80,6 +80,10 @@ public protocol SpreadsheetViewDelegate: class {
     ///   - spreadsheetView: The spreadsheet view object that is notifying you of the selection change.
     ///   - indexPath: The index path of the cell that was deselected.
     func spreadsheetView(_ spreadsheetView: SpreadsheetView, didDeselectItemAt indexPath: IndexPath)
+    
+    func spreadsheetView(_ spreadsheetView: SpreadsheetView, touchBegan: UITouch, at indexPath: IndexPath)
+    func spreadsheetView(_ spreadsheetView: SpreadsheetView, touchMoved: UITouch, at indexPath: IndexPath)
+    func spreadsheetView(_ spreadsheetView: SpreadsheetView, touchEndedOrCanceled: UITouch, at indexPath: IndexPath)
 }
 
 extension SpreadsheetViewDelegate {
@@ -90,4 +94,7 @@ extension SpreadsheetViewDelegate {
     public func spreadsheetView(_ spreadsheetView: SpreadsheetView, shouldDeselectItemAt indexPath: IndexPath) -> Bool { return true }
     public func spreadsheetView(_ spreadsheetView: SpreadsheetView, didSelectItemAt indexPath: IndexPath) {}
     public func spreadsheetView(_ spreadsheetView: SpreadsheetView, didDeselectItemAt indexPath: IndexPath) {}
+    public func spreadsheetView(_ spreadsheetView: SpreadsheetView, touchBegan: UITouch, at indexPath: IndexPath) {}
+    public func spreadsheetView(_ spreadsheetView: SpreadsheetView, touchMoved: UITouch, at indexPath: IndexPath) {}
+    public func spreadsheetView(_ spreadsheetView: SpreadsheetView, touchEndedOrCanceled: UITouch, at indexPath: IndexPath) {}
 }
