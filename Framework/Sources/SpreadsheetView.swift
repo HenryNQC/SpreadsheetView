@@ -396,12 +396,12 @@ public class SpreadsheetView: UIView {
         rootView.addSubview(cornerView)
         super.addSubview(overlayView)
 
-        [tableView, columnHeaderView, rowHeaderView, cornerView, overlayView].forEach {
-            addGestureRecognizer($0.panGestureRecognizer)
-            if #available(iOS 11.0, *) {
-                $0.contentInsetAdjustmentBehavior = .never
-            }
-        }
+//        [tableView, columnHeaderView, rowHeaderView, cornerView, overlayView].forEach {
+//            addGestureRecognizer($0.panGestureRecognizer)
+//            if #available(iOS 11.0, *) {
+//                $0.contentInsetAdjustmentBehavior = .never
+//            }
+//        }
     }
 
     @objc(registerClass:forCellWithReuseIdentifier:)
@@ -508,6 +508,7 @@ public class SpreadsheetView: UIView {
                 $0.touchesBegan = nil
                 $0.touchesEnded = nil
                 $0.touchesCancelled = nil
+                $0.touchesMoved = nil
             }
         }
     }

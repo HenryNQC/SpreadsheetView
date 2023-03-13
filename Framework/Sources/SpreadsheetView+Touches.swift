@@ -18,7 +18,8 @@ extension SpreadsheetView {
         unhighlightAllItems()
         highlightItems(on: touches)
         if !allowsMultipleSelection,
-            let touch = touches.first, let indexPath = indexPathForItem(at: touch.location(in: self)),
+            let touch = touches.first,
+            let indexPath = indexPathForItem(at: touch.location(in: self)),
             let cell = cellForItem(at: indexPath), cell.isUserInteractionEnabled {
             selectedIndexPaths.forEach {
                 cellsForItem(at: $0).forEach { $0.isSelected = false }
@@ -29,15 +30,14 @@ extension SpreadsheetView {
     }
     
     func touchesMoved(_ touches: Set<UITouch>, _ event: UIEvent?) {
-        guard currentTouch == nil else {
+        guard let touch = touches.first, touch === currentTouch,
+              let indexPath = indexPathForItem(at: touch.location(in: self)),
+              let cell = cellForItem(at: indexPath), cell.isUserInteractionEnabled
+        else {
             return
         }
-        currentTouch = touches.first
         
-        if !allowsMultipleSelection,
-            let touch = touches.first, let indexPath = indexPathForItem(at: touch.location(in: self)),
-            let cell = cellForItem(at: indexPath), cell.isUserInteractionEnabled {
-            
+        if !allowsMultipleSelection {
             delegate?.spreadsheetView(self, touchMoved: touch, at: indexPath)
         }
     }

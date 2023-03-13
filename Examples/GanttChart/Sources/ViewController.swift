@@ -86,6 +86,8 @@ class ViewController: UIViewController, SpreadsheetViewDataSource, SpreadsheetVi
     let colors = [UIColor(red: 0.314, green: 0.698, blue: 0.337, alpha: 1),
                   UIColor(red: 1.000, green: 0.718, blue: 0.298, alpha: 1),
                   UIColor(red: 0.180, green: 0.671, blue: 0.796, alpha: 1)]
+    
+    var selectedIndexPath: IndexPath?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -120,11 +122,11 @@ class ViewController: UIViewController, SpreadsheetViewDataSource, SpreadsheetVi
 
     func spreadsheetView(_ spreadsheetView: SpreadsheetView, widthForColumn column: Int) -> CGFloat {
         if case 0 = column {
-            return 90
+            return 30
         } else if case 1...2 = column {
-            return 50
+            return 30
         } else {
-            return 50
+            return 100
         }
     }
 
@@ -213,13 +215,16 @@ class ViewController: UIViewController, SpreadsheetViewDataSource, SpreadsheetVi
         case (3..<(3 + 7 * weeks.count), 2..<(2 + tasks.count)):
             let cell = spreadsheetView.dequeueReusableCell(withReuseIdentifier: String(describing: ChartBarCell.self), for: indexPath) as! ChartBarCell
             let start = Int(tasks[indexPath.row - 2][1])!
+            cell.resetSelectedArea()
             if start == indexPath.column - 2 {
                 cell.label.text = tasks[indexPath.row - 2][0]
                 let colorIndex = Int(tasks[indexPath.row - 2][3])!
                 cell.color = colors[colorIndex]
+                cell.isUserInteractionEnabled = true
             } else {
                 cell.label.text = ""
                 cell.color = .clear
+                cell.isUserInteractionEnabled = false
             }
             return cell
         default:
@@ -231,5 +236,31 @@ class ViewController: UIViewController, SpreadsheetViewDataSource, SpreadsheetVi
 
     func spreadsheetView(_ spreadsheetView: SpreadsheetView, didSelectItemAt indexPath: IndexPath) {
         print("Selected: (row: \(indexPath.row), column: \(indexPath.column))")
+    }
+    
+    
+    //@TODO: Save current selection location to model
+    func spreadsheetView(_ spreadsheetView: SpreadsheetView, touchBegan: UITouch, at indexPath: IndexPath) {
+        if let selectedIndexPath = selectedIndexPath,
+           indexPath != selectedIndexPath {
+            let cell = spreadsheetView.cellForItem(at: selectedIndexPath) as? ChartBarCell
+            cell?.resetSelectedArea()
+        }
+        let cell = spreadsheetView.cellForItem(at: indexPath) as? ChartBarCell
+        cell?.touchBegan(touchBegan)
+        self.selectedIndexPath = indexPath
+    }
+    
+    func spreadsheetView(_ spreadsheetView: SpreadsheetView, touchEndedOrCanceled: UITouch, at indexPath: IndexPath) {
+        let cell = spreadsheetView.cellForItem(at: indexPath) as? ChartBarCell
+        cell?.touchEnded(touchEndedOrCanceled)
+    }
+    
+    func spreadsheetView(_ spreadsheetView: SpreadsheetView, touchMoved: UITouch, at indexPath: IndexPath) {
+        if indexPath != selectedIndexPath {
+            return
+        }
+        let cell = spreadsheetView.cellForItem(at: indexPath) as? ChartBarCell
+        cell?.touchMoved(touchMoved)
     }
 }
